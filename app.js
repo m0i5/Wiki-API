@@ -29,6 +29,7 @@ const articleSchema = {
 const Article = mongoose.model("Article", articleSchema);
 
 
+///////////////////////////////////////////// Requests targetting all articles ////////////////////////////////////////////////////////
 
 app.route("/articles")
 
@@ -53,11 +54,74 @@ app.route("/articles")
 
   .delete(function (req, res) {
     Article.deleteMany({}).then(function () {
-      res.send("Successfully dleted all articles");
+      res.send("Successfully deleted all articles");
     }).catch(err => {
       res.send(err);
     });
   });
+
+
+  ///////////////////////////////////////////// Requests targetting a specific article ////////////////////////////////////////////////////////
+
+  app.route("/articles/:articleTitle")
+
+    .get(function (req, res) {
+
+      Article.findOne({
+          title: req.params.articleTitle
+        }).then((foundArticle) => {
+
+          res.send(foundArticle.content);
+
+        })
+
+        .catch(err => {
+
+          res.send(err);
+
+        })
+
+    })
+
+    .put(function (req, res) {
+      Article.replaceOne({
+          title: req.params.articleTitle
+        }, {
+          title: req.body.title,
+          content: req.body.content
+        }, {
+          overwrite: true
+        })
+        .then(function () {
+          res.send("Succesfully updated article");
+        })
+        .catch(function (err) {
+          res.send(err);
+        })
+
+    })
+
+    .patch(function (req, res) {
+      Article.updateOne({
+          title: req.params.articleTitle
+        }, {
+          title: req.body.title,
+          content: req.body.content
+        })
+        .then(function () {
+          res.send("Succesfully updated article");
+        })
+        .catch(function (err) {
+          res.send(err);
+        })
+
+    })
+
+
+
+
+    
+
 
 
 
