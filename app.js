@@ -30,25 +30,35 @@ const Article = mongoose.model("Article", articleSchema);
 
 
 
-app.get("/articles", function(req,res){
-Article.find({}).then(foundArticles => {
-  res.send(foundArticles);
-}).catch(err => console.log(err));
+app.route("/articles")
 
-;})
+  .get(function (req, res) {
+    Article.find({}).then(foundArticles => {
+      res.send(foundArticles);
+    }).catch(err => console.log(err));;
+  })
 
-//post-request targets the 'articles' route, then creates a 'newArticle' 
-app.post("/articles", async (req, res) => {
-  const newArticle = new Article ({
+  //post-request targets the 'articles' route, then creates a 'newArticle' 
+  .post(async (req, res) => {
+    const newArticle = new Article({
       title: req.body.title,
       content: req.body.content
-  })
-  newArticle.save().then(success => {  //send it to the client when success
+    })
+    newArticle.save().then(success => { //send it to the client when success
       res.send("Succesfully added a new article");
-  }).catch(err => { //catch error and send it
+    }).catch(err => { //catch error and send it
       res.send(err);
+    })
   })
-});
+
+  .delete(function (req, res) {
+    Article.deleteMany({}).then(function () {
+      res.send("Successfully dleted all articles");
+    }).catch(err => {
+      res.send(err);
+    });
+  });
+
 
 
 
