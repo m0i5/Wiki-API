@@ -117,10 +117,30 @@ app.route("/articles")
 
     })
 
+    .delete(function (req, res) {
+      Article.deleteOne({
+          title: req.params.articleTitle
+        })
+        .then(() => {
+          res.send("Succesfully updated article");
+        })
+        .catch(err => {
+          res.send(err);
+        })
 
-
+    })
 
     
+
+
+  
+
+
+
+
+
+
+
 
 
 
